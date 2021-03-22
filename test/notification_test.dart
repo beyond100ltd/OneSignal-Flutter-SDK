@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 import 'package:onesignal_flutter/src/notification.dart';
-import 'package:onesignal_flutter/src/defines.dart';
 import 'test_data.dart';
 
 void main() {
@@ -25,11 +24,11 @@ void main() {
   });
 
   test('expect raw payload to be parsed correctly', () {
-    expect(notification.rawPayload['test'], "raw payload");
+    expect(notification.rawPayload!['test'], "raw payload");
   });
 
   test('expect attachments to be parsed correctly', () {
-    expect(notification.attachments['id'], "https://www.onesignal.com");
+    expect(notification.attachments!['id'], "https://www.onesignal.com");
   });
 
   test('expect body to be parsed correctly', () {
