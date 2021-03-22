@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       this.setState(() {
         _debugLabelString =
-            "Opened notification: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}";
+            "Opened notification: \n${result.notification!.jsonRepresentation().replaceAll("\\n", "\n")}";
       });
     });
 
@@ -83,10 +83,10 @@ class _MyAppState extends State<MyApp> {
     OneSignal.shared
         .setInFocusDisplayType(OSNotificationDisplayType.notification);
 
-    bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
+    bool? requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
 
     this.setState(() {
-      _enableConsentButton = requiresConsent;
+      _enableConsentButton = requiresConsent!;
     });
 
     // Some examples of how to use In App Messaging public methods with OneSignal SDK
@@ -98,8 +98,6 @@ class _MyAppState extends State<MyApp> {
 
   void _handleGetTags() {
     OneSignal.shared.getTags().then((tags) {
-      if (tags == null) return;
-
       setState((() {
         _debugLabelString = "$tags";
       }));
@@ -182,9 +180,7 @@ class _MyAppState extends State<MyApp> {
 
   void _handleSetExternalUserId() {
     print("Setting external user ID");
-    OneSignal.shared.setExternalUserId(_externalUserId).then((results) {
-        if (results == null) return;
-
+    OneSignal.shared.setExternalUserId(_externalUserId!).then((results) {
         this.setState(() {
             _debugLabelString = "External user id set: $results";
         });
@@ -193,8 +189,6 @@ class _MyAppState extends State<MyApp> {
 
   void _handleRemoveExternalUserId() {
     OneSignal.shared.removeExternalUserId().then((results) {
-        if (results == null) return;
-
         this.setState(() {
            _debugLabelString = "External user id removed: $results";
         });
@@ -210,7 +204,7 @@ class _MyAppState extends State<MyApp> {
         "http://cdn1-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-2.jpg";
 
     var notification = OSCreateNotification(
-        playerIds: [playerId],
+        playerIds: [playerId!],
         content: "this is a test from OneSignal's Flutter SDK",
         heading: "Test Notification",
         iosAttachments: {"id1": imgUrlString},
@@ -233,7 +227,7 @@ class _MyAppState extends State<MyApp> {
     var playerId = status.subscriptionStatus.userId;
 
     var notification = OSCreateNotification.silentNotification(
-        playerIds: [playerId], additionalData: {'test': 'value'});
+        playerIds: [playerId!], additionalData: {'test': 'value'});
 
     var response = await OneSignal.shared.postNotification(notification);
 
@@ -261,7 +255,7 @@ class _MyAppState extends State<MyApp> {
     OneSignal.shared.removeTriggerForKey("trigger_2");
 
     // Get the value for a trigger by its key
-    Object triggerValue = await OneSignal.shared.getTriggerValueForKey("trigger_3");
+    Object triggerValue = (await OneSignal.shared.getTriggerValueForKey("trigger_3"))!;
     print("'trigger_3' key trigger value: " + triggerValue.toString());
 
     // Create a list and bulk remove triggers based on keys supplied
